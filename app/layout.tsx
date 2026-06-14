@@ -41,7 +41,7 @@ function Header() {
           Parley<span className="text-emerald-700">Notes</span>
         </Link>
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-4 text-sm text-stone-600 sm:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-4 text-sm text-stone-600 sm:flex">
           {NAV.map(([label, href]) => <Link key={href} href={href} className="hover:text-stone-900">{label}</Link>)}
           <a href={SITE.repo} className="hover:text-stone-900" target="_blank" rel="noreferrer">GitHub</a>
           <Link href="/app" className="rounded-lg bg-stone-900 px-3 py-1.5 font-medium text-white hover:bg-stone-700">Open app</Link>
@@ -49,7 +49,7 @@ function Header() {
         {/* Mobile nav — CSS-only disclosure, no client JS */}
         <details className="relative sm:hidden">
           <summary aria-label="Open menu" className="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-stone-300 text-stone-700 [&::-webkit-details-marker]:hidden">☰</summary>
-          <nav className="absolute right-0 mt-2 w-44 rounded-xl border border-stone-200 bg-white p-2 text-sm shadow-lg">
+          <nav aria-label="Mobile" className="absolute right-0 mt-2 w-44 rounded-xl border border-stone-200 bg-white p-2 text-sm shadow-lg">
             {NAV.map(([label, href]) => <Link key={href} href={href} className="block rounded-lg px-3 py-2 text-stone-700 hover:bg-stone-50">{label}</Link>)}
             <a href={SITE.repo} className="block rounded-lg px-3 py-2 text-stone-700 hover:bg-stone-50" target="_blank" rel="noreferrer">GitHub</a>
             <Link href="/app" className="mt-1 block rounded-lg bg-stone-900 px-3 py-2 text-center font-medium text-white">Open app</Link>

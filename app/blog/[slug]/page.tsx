@@ -38,7 +38,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <article className="mx-auto max-w-2xl px-5 py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <nav className="mb-4 text-sm text-stone-600"><Link href="/blog" className="hover:text-stone-700">Guides</Link> › {p.title}</nav>
+      <nav aria-label="Breadcrumb" className="mb-4 text-sm text-stone-600"><Link href="/blog" className="hover:text-stone-700">Guides</Link> › {p.title}</nav>
       <h1 className="text-3xl font-bold tracking-tight text-stone-900">{p.title}</h1>
       <div className="mt-2 text-xs text-stone-600">{p.date} · {p.readMins} min read</div>
 

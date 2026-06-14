@@ -24,7 +24,7 @@ export default async function AlternativePage({ params }: { params: Promise<{ sl
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-12">
-      <nav className="mb-4 text-sm text-stone-600"><Link href="/alternatives" className="hover:text-stone-700">Alternatives</Link> › {c.name}</nav>
+      <nav aria-label="Breadcrumb" className="mb-4 text-sm text-stone-600"><Link href="/alternatives" className="hover:text-stone-700">Alternatives</Link> › {c.name}</nav>
       <h1 className="text-3xl font-extrabold tracking-tight">The open-source {c.name} alternative</h1>
       <p className="mt-4 text-stone-600">
         <strong>{c.name}</strong> {c.what} ParleyNotes does the same core job — accurate transcripts and AI
