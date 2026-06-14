@@ -19,7 +19,7 @@ export default function UseCasesIndex() {
         {USE_CASES.map((u) => (
           <Link key={u.slug} href={`/use-cases/${u.slug}`} className="rounded-xl border border-stone-200 bg-white p-5 hover:border-emerald-300">
             <div className="font-semibold text-stone-900">{u.name}</div>
-            <p className="mt-1 text-sm text-stone-500">{u.headline}</p>
+            <p className="mt-1 text-sm text-stone-600">{u.headline}</p>
           </Link>
         ))}
       </div>

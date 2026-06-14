@@ -29,7 +29,7 @@ export default function Home() {
               Star on GitHub
             </a>
           </div>
-          <p className="mt-4 text-xs text-stone-500">No sign-up. Works in Chrome, Edge and Brave.</p>
+          <p className="mt-4 text-xs text-stone-600">No sign-up. Works in Chrome, Edge and Brave.</p>
         </div>
       </section>
 
@@ -69,7 +69,7 @@ export default function Home() {
       {/* Platforms */}
       <section className="mx-auto max-w-6xl px-5 py-10">
         <h2 className="text-center text-2xl font-bold">Transcribe any meeting</h2>
-        <p className="mt-2 text-center text-sm text-stone-500">Works with every browser-based meeting platform.</p>
+        <p className="mt-2 text-center text-sm text-stone-600">Works with every browser-based meeting platform.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           {PLATFORMS.map((p) => (
             <Link key={p.slug} href={`/transcribe/${p.slug}`} className="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm hover:border-emerald-300">
@@ -86,7 +86,7 @@ export default function Home() {
           {COMPETITORS.slice(0, 6).map((c) => (
             <Link key={c.slug} href={`/alternatives/${c.slug}`} className="rounded-xl border border-stone-200 bg-white p-4 hover:border-emerald-300">
               <div className="font-semibold">ParleyNotes vs {c.name}</div>
-              <div className="mt-1 text-sm text-stone-500">{c.what}</div>
+              <div className="mt-1 text-sm text-stone-600">{c.what}</div>
             </Link>
           ))}
         </div>

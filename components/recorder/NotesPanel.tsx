@@ -89,14 +89,14 @@ export default function NotesPanel({ transcript, durationSec }: { transcript: st
     <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold">Notes</h2>
-        <button onClick={() => setShowKey((s) => !s)} className="text-xs text-stone-500 underline-offset-2 hover:underline">
+        <button onClick={() => setShowKey((s) => !s)} className="text-xs text-stone-600 underline-offset-2 hover:underline">
           {apiKey ? "AI key set" : "Add AI key"}
         </button>
       </div>
 
       {showKey && (
         <div className="mt-3 rounded-xl bg-stone-50 p-3 text-sm">
-          <p className="text-xs text-stone-500">Optional — for AI-written notes. Your key stays in this browser and the transcript goes straight to your provider, never to us.</p>
+          <p className="text-xs text-stone-600">Optional — for AI-written notes. Your key stays in this browser and the transcript goes straight to your provider, never to us.</p>
           <div className="mt-2 flex gap-2">
             <select aria-label="AI provider" value={providerId} onChange={(e) => persistKey(e.target.value, apiKey)} className="rounded-lg border border-stone-300 px-2 py-1.5 text-sm">
               {AI_PROVIDERS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}

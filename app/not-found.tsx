@@ -12,7 +12,7 @@ export default function NotFound() {
         <Link href="/app" className="rounded-xl bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600">Open the app</Link>
         <Link href="/" className="rounded-xl border border-stone-300 px-5 py-2.5 text-sm font-medium hover:bg-stone-50">Back home</Link>
       </div>
-      <div className="mt-8 text-sm text-stone-500">
+      <div className="mt-8 text-sm text-stone-600">
         <Link href="/transcribe" className="hover:text-stone-900">Transcribe</Link> ·{" "}
         <Link href="/alternatives" className="hover:text-stone-900">Alternatives</Link> ·{" "}
         <Link href="/blog" className="hover:text-stone-900">Guides</Link>

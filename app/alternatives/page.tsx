@@ -22,7 +22,7 @@ export default function AlternativesIndex() {
         {COMPETITORS.map((c) => (
           <Link key={c.slug} href={`/alternatives/${c.slug}`} className="rounded-xl border border-stone-200 bg-white p-5 hover:border-emerald-300">
             <div className="font-semibold text-stone-900">ParleyNotes vs {c.name}</div>
-            <p className="mt-1 text-sm text-stone-500">{c.what}</p>
+            <p className="mt-1 text-sm text-stone-600">{c.what}</p>
             <span className="mt-3 inline-block text-sm font-medium text-emerald-700">Compare →</span>
           </Link>
         ))}

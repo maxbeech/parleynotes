@@ -63,17 +63,17 @@ function Header() {
 function Footer() {
   return (
     <footer className="mt-20 border-t border-stone-200 bg-white/50">
-      <div className="mx-auto max-w-6xl px-5 py-10 text-sm text-stone-500">
+      <div className="mx-auto max-w-6xl px-5 py-10 text-sm text-stone-600">
         <div className="grid gap-6 sm:grid-cols-4">
           <div>
             <div className="font-bold text-stone-800">{SITE.name}</div>
-            <p className="mt-2 max-w-xs text-xs text-stone-500">{SITE.tagline}. Audio is transcribed on your device and never uploaded.</p>
+            <p className="mt-2 max-w-xs text-xs text-stone-600">{SITE.tagline}. Audio is transcribed on your device and never uploaded.</p>
           </div>
           <FooterCol title="Product" links={[["Open app", "/app"], ["Pricing", "/pricing"], ["Open source", "/open-source"]]} />
           <FooterCol title="Transcribe" links={[["Zoom", "/transcribe/zoom"], ["Google Meet", "/transcribe/google-meet"], ["Microsoft Teams", "/transcribe/microsoft-teams"]]} />
           <FooterCol title="Alternatives" links={[["Granola", "/alternatives/granola"], ["Otter.ai", "/alternatives/otter-ai"], ["Fireflies", "/alternatives/fireflies-ai"]]} />
         </div>
-        <p className="mt-8 text-xs text-stone-500">© {new Date().getFullYear()} {SITE.name}. Open source under the MIT licence. Free forever for individuals.</p>
+        <p className="mt-8 text-xs text-stone-600">© {new Date().getFullYear()} {SITE.name}. Open source under the MIT licence. Free forever for individuals.</p>
       </div>
     </footer>
   );
@@ -82,7 +82,7 @@ function Footer() {
 function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
   return (
     <div>
-      <div className="text-xs font-semibold uppercase tracking-wide text-stone-500">{title}</div>
+      <div className="text-xs font-semibold uppercase tracking-wide text-stone-600">{title}</div>
       <ul className="mt-2 space-y-1.5">
         {links.map(([label, href]) => (
           <li key={href}><Link href={href} className="hover:text-stone-900">{label}</Link></li>

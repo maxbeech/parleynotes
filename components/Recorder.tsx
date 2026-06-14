@@ -177,14 +177,14 @@ export default function Recorder() {
         )}
         {working && <p className="mt-3 text-sm text-stone-600">Transcribing on your device…</p>}
         {error && <p className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>}
-        <p className="mt-4 text-xs text-stone-500">
+        <p className="mt-4 text-xs text-stone-600">
           Tip: when sharing your meeting tab, tick <b>“Share tab audio”</b> so the other participants are captured. Audio never leaves your browser.
         </p>
 
         <div className="mt-5">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold text-stone-700">Transcript</h3>
-            {transcript && <button onClick={copyTranscript} className="text-xs text-stone-500 hover:text-stone-900">{copied ? "Copied ✓" : "Copy"}</button>}
+            {transcript && <button onClick={copyTranscript} className="text-xs text-stone-600 hover:text-stone-900">{copied ? "Copied ✓" : "Copy"}</button>}
           </div>
           <textarea aria-label="Transcript" value={transcript} onChange={(e) => setTranscript(e.target.value)}
             placeholder="Your transcript will appear here as you record…"

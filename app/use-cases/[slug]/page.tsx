@@ -23,7 +23,7 @@ export default async function UseCasePage({ params }: { params: Promise<{ slug: 
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-12">
-      <nav className="mb-4 text-sm text-stone-500"><Link href="/use-cases" className="hover:text-stone-700">Use cases</Link> › {u.name}</nav>
+      <nav className="mb-4 text-sm text-stone-600"><Link href="/use-cases" className="hover:text-stone-700">Use cases</Link> › {u.name}</nav>
       <h1 className="text-3xl font-extrabold tracking-tight">{u.headline}</h1>
       <p className="mt-4 text-stone-600">{u.why}</p>
 

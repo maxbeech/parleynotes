@@ -41,16 +41,16 @@ export default function SavedMeetings({ reloadFlag }: { reloadFlag: number }) {
         <input aria-label="Search saved meetings" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or transcript…"
           className="mt-2 w-full rounded-lg border border-stone-200 px-3 py-1.5 text-xs outline-none focus:border-emerald-400" />
       )}
-      {shown.length === 0 && <p className="mt-2 text-xs text-stone-500">No meetings match “{query}”.</p>}
+      {shown.length === 0 && <p className="mt-2 text-xs text-stone-600">No meetings match “{query}”.</p>}
       <ul className="mt-2 space-y-1.5">
         {shown.map((m) => (
           <li key={m.id} className="flex items-center justify-between gap-2 rounded-lg bg-stone-50 px-3 py-2 text-sm">
             <span className="truncate">
               <span className="font-medium">{m.title}</span>
-              <span className="ml-2 text-xs text-stone-500">{m.dateISO.slice(0, 10)}</span>
+              <span className="ml-2 text-xs text-stone-600">{m.dateISO.slice(0, 10)}</span>
             </span>
             <span className="flex shrink-0 gap-2 text-xs">
-              <button onClick={() => exportOne(m)} className="text-stone-500 hover:text-stone-900">.md</button>
+              <button onClick={() => exportOne(m)} className="text-stone-600 hover:text-stone-900">.md</button>
               <button onClick={() => remove(m.id)} className="text-rose-500 hover:text-rose-700">delete</button>
             </span>
           </li>

@@ -51,7 +51,7 @@ export default function Pricing() {
           <div key={t.name} className={`rounded-2xl border bg-white p-6 shadow-sm ${t.highlight ? "border-emerald-400 ring-1 ring-emerald-200" : "border-stone-200"}`}>
             {t.highlight && <div className="mb-3 inline-block rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">Most popular</div>}
             <h2 className="text-lg font-bold">{t.name}</h2>
-            <div className="mt-2"><span className="text-3xl font-extrabold">{t.price}</span> <span className="text-sm text-stone-500">{t.cadence}</span></div>
+            <div className="mt-2"><span className="text-3xl font-extrabold">{t.price}</span> <span className="text-sm text-stone-600">{t.cadence}</span></div>
             <ul className="mt-5 space-y-2 text-sm text-stone-600">
               {t.features.map((f) => (
                 <li key={f} className="flex gap-2"><span className="text-emerald-700">✓</span><span>{f}</span></li>
@@ -66,7 +66,7 @@ export default function Pricing() {
         ))}
       </div>
 
-      <p className="mt-8 text-center text-xs text-stone-500">
+      <p className="mt-8 text-center text-xs text-stone-600">
         Prices in USD. Self-hosting is always free under the MIT licence — a Company license adds SSO, admin tooling and support.
       </p>
     </main>

@@ -19,8 +19,8 @@ export default function BlogIndex() {
         {POSTS.map((p) => (
           <Link key={p.slug} href={`/blog/${p.slug}`} className="block rounded-xl border border-stone-200 bg-white p-5 hover:border-emerald-300">
             <h2 className="font-semibold text-stone-900">{p.title}</h2>
-            <p className="mt-1 text-sm text-stone-500">{p.description}</p>
-            <div className="mt-2 text-xs text-stone-500">{p.date} · {p.readMins} min read</div>
+            <p className="mt-1 text-sm text-stone-600">{p.description}</p>
+            <div className="mt-2 text-xs text-stone-600">{p.date} · {p.readMins} min read</div>
           </Link>
         ))}
       </div>
