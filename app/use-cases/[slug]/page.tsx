@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const u = findUseCase(slug);
   if (!u) return {};
   const description = `${u.headline}. Private, on-device AI transcription and notes with ParleyNotes — free for individuals.`;
-  return { title: u.headline, description, alternates: { canonical: `${SITE.url}/use-cases/${u.slug}` }, openGraph: { title: u.headline, description, type: "article" } };
+  return { title: u.headline, description, alternates: { canonical: `${SITE.url}/use-cases/${u.slug}` }, openGraph: { title: u.headline, description, type: "article", images: ["/opengraph-image"] } };
 }
 
 export default async function UseCasePage({ params }: { params: Promise<{ slug: string }> }) {

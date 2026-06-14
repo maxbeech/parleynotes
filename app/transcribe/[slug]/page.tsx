@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!p) return {};
   const title = `${p.name} transcription — free, private & on-device | ParleyNotes`;
   const description = `How to transcribe ${p.name} meetings for free with ParleyNotes. On-device AI transcription and notes — no bot joins the call, no cloud upload.`;
-  return { title, description, alternates: { canonical: `${SITE.url}/transcribe/${p.slug}` }, openGraph: { title, description, type: "article" } };
+  return { title, description, alternates: { canonical: `${SITE.url}/transcribe/${p.slug}` }, openGraph: { title, description, type: "article", images: ["/opengraph-image"] } };
 }
 
 export default async function PlatformPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!c) return {};
   const title = `${c.name} alternative — open-source & private | ParleyNotes`;
   const description = `Looking for a ${c.name} alternative? ParleyNotes is the open-source AI meeting assistant that transcribes on your device — no cloud upload, free for individuals.`;
-  return { title, description, alternates: { canonical: `${SITE.url}/alternatives/${c.slug}` }, openGraph: { title, description, type: "article" } };
+  return { title, description, alternates: { canonical: `${SITE.url}/alternatives/${c.slug}` }, openGraph: { title, description, type: "article", images: ["/opengraph-image"] } };
 }
 
 export default async function AlternativePage({ params }: { params: Promise<{ slug: string }> }) {
