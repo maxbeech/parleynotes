@@ -16,9 +16,13 @@ joins your call, no audio leaves your machine, no per-seat fee.
 
 ## How it works
 
-1. **Capture** — share your meeting tab (with audio) + your mic, or upload an audio file.
-2. **Transcribe** — Whisper runs in a Web Worker via WebGPU (or WASM fallback). The model
-   streams once from the Hugging Face CDN and is then cached.
+1. **Capture** — share your meeting tab (with audio) + your mic, upload an audio file, or
+   hit **Try with a sample clip** to see it work instantly. The app detects your browser's
+   capabilities and guides you if a mode isn't supported (e.g. tab audio on mobile).
+2. **Transcribe** — Whisper runs in a Web Worker via WebGPU (or WASM fallback). Pick a model:
+   **English · fast** (`whisper-tiny.en`, small first download — the default), **English ·
+   accurate** (`whisper-base.en`), or **Multilingual**. The model streams once from the
+   Hugging Face CDN and is then cached.
 3. **Notes** — one click turns the transcript into a summary, decisions and action items.
    Edit the Markdown, save it locally (IndexedDB), or export it.
 

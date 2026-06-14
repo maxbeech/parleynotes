@@ -13,8 +13,8 @@ export class AudioCapture {
   private ctx: AudioContext | null = null;
   private node: ScriptProcessorNode | null = null;
   private streams: MediaStream[] = [];
-  private chunks: Float32Array[] = [];
-  private drainedSamples = 0;
+  private chunks: Float32Array[] = []; // only audio NOT yet drained (bounded memory)
+  private totalSamples = 0; // running count for elapsed time (chunks are discarded)
   sampleRate = 0;
   onLevel?: (rms: number) => void;
 
@@ -50,6 +50,7 @@ export class AudioCapture {
       const copy = new Float32Array(input.length);
       copy.set(input);
       this.chunks.push(copy);
+      this.totalSamples += copy.length;
       if (this.onLevel) {
         let sum = 0;
         for (let i = 0; i < copy.length; i++) sum += copy[i] * copy[i];
@@ -65,22 +66,16 @@ export class AudioCapture {
     sink.connect(ctx.destination);
   }
 
-  /** Float32 of audio accumulated since the previous drain (for live chunks). */
+  /** Float32 of audio captured since the previous drain, then discarded so
+   *  memory stays bounded to ~one chunk window even for long meetings. */
   drainNew(): Float32Array {
-    const all = concatFloat32(this.chunks);
-    const fresh = all.slice(this.drainedSamples);
-    this.drainedSamples = all.length;
+    const fresh = concatFloat32(this.chunks);
+    this.chunks = [];
     return fresh;
   }
 
-  /** The full session audio so far. */
-  full(): Float32Array {
-    return concatFloat32(this.chunks);
-  }
-
   totalSeconds(): number {
-    const total = this.chunks.reduce((n, c) => n + c.length, 0);
-    return this.sampleRate ? total / this.sampleRate : 0;
+    return this.sampleRate ? this.totalSamples / this.sampleRate : 0;
   }
 
   async stop(): Promise<void> {
