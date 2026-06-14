@@ -13,6 +13,18 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "public, max-age=86400, must-revalidate" },
         ],
       },
+      {
+        // Baseline security headers on every route. We deliberately do NOT set a
+        // restrictive Permissions-Policy here: the app needs same-origin
+        // microphone + display-capture (getUserMedia / getDisplayMedia), and the
+        // browser default already allows those for same-origin.
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+        ],
+      },
     ];
   },
 };
