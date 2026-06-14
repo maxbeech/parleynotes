@@ -23,9 +23,10 @@ export default function Controls({
       )}
 
       <label className="flex items-center justify-between rounded-lg bg-stone-50 px-3 py-2 text-xs text-stone-600">
-        <span>Language</span>
+        <span>Model</span>
         <select value={lang} onChange={(e) => onLang(e.target.value)} className="rounded-md border border-stone-300 bg-white px-2 py-1 text-xs">
-          <option value="en">English (faster)</option>
+          <option value="en">English · fast (small download)</option>
+          <option value="en-hq">English · accurate (larger)</option>
           <option value="multi">Multilingual</option>
         </select>
       </label>

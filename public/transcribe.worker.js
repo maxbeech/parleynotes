@@ -28,13 +28,15 @@ async function pickDevice() {
   return "wasm";
 }
 
-// Model matrix: WebGPU runs the larger, more accurate base model; WASM uses the
-// fast tiny model. English-only variants are faster/smaller for English audio.
+// Model matrix. Default ("en") is the small tiny.en model so the FIRST load is
+// fast (~40MB) — important for the "try a sample" first impression. "en-hq"
+// opts into the larger, more accurate base.en. "multi" is multilingual.
+// WebGPU uses onnx-community builds (webgpu-optimised); WASM uses Xenova builds.
 function modelFor(device, lang) {
-  if (lang === "multi") {
-    return device === "webgpu" ? "onnx-community/whisper-base" : "Xenova/whisper-tiny";
-  }
-  return device === "webgpu" ? "onnx-community/whisper-base.en" : "Xenova/whisper-tiny.en";
+  const webgpu = device === "webgpu";
+  if (lang === "multi") return webgpu ? "onnx-community/whisper-base" : "Xenova/whisper-tiny";
+  if (lang === "en-hq") return webgpu ? "onnx-community/whisper-base.en" : "Xenova/whisper-base.en";
+  return webgpu ? "onnx-community/whisper-tiny.en" : "Xenova/whisper-tiny.en";
 }
 
 class Transcriber {

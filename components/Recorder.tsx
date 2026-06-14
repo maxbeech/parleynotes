@@ -139,7 +139,7 @@ export default function Recorder() {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">Record or upload</h2>
           {model === "ready" && <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">Model ready{device ? ` · ${device}` : ""}</span>}
-          {model === "loading" && <span className="text-xs text-stone-600">Loading model… {progress}%</span>}
+          {model === "loading" && <span className="text-xs text-stone-600">Downloading model (one-time)… {progress}%</span>}
         </div>
 
         {!recording ? (
