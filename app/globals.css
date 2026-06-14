@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+/* ParleyNotes ships a single, intentional warm LIGHT theme. Every surface uses
+   explicit Tailwind colors (cream page, white cards, ink text, emerald accent).
+   We do NOT honour prefers-color-scheme: a dark body background would sit behind
+   the light-theme text and break contrast (an unlayered body{background} rule
+   would also override Tailwind utility classes under v4 cascade layers). */
+:root {
+  --paper: #faf7f2;
+  --ink: #1c1917;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Subtle paper grain via a soft radial wash behind the hero. */
+.paper-grad {
+  background:
+    radial-gradient(900px 400px at 15% -5%, rgba(16, 185, 129, 0.10), transparent 60%),
+    radial-gradient(700px 350px at 95% 0%, rgba(245, 158, 11, 0.08), transparent 55%);
+}
+
+@keyframes pulse-rec {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.rec-dot { animation: pulse-rec 1.2s ease-in-out infinite; }
