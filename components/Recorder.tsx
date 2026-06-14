@@ -11,6 +11,7 @@ import { SITE } from "@/lib/site";
 
 type ModelState = "idle" | "loading" | "ready";
 const CHUNK_MS = 20000; // transcribe every 20s of speech for a live feel
+const DRAFT_KEY = "parleynotes.draft"; // autosave of the working transcript
 
 export default function Recorder() {
   const [model, setModel] = useState<ModelState>("idle");
@@ -27,6 +28,7 @@ export default function Recorder() {
   const [support, setSupport] = useState<SupportResult>({
     canRecordMeeting: true, canRecordMic: true, canTranscribeFile: true, warning: "",
   });
+  const [draft, setDraft] = useState("");
 
   const trans = useRef<TranscriberController | null>(null);
   const cap = useRef<AudioCapture | null>(null);
@@ -39,6 +41,11 @@ export default function Recorder() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setSupport(evaluateSupport(readCapabilities())); }, []);
   useEffect(() => { langRef.current = lang; }, [lang]);
+
+  // Autosave the working transcript so a tab reload / crash doesn't lose it.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { try { const d = localStorage.getItem(DRAFT_KEY); if (d) setDraft(d); } catch { /* ignore */ } }, []);
+  useEffect(() => { try { if (transcript) localStorage.setItem(DRAFT_KEY, transcript); } catch { /* ignore */ } }, [transcript]);
 
   const getTranscriber = useCallback(() => {
     if (!trans.current) {
@@ -159,6 +166,15 @@ export default function Recorder() {
           </div>
         )}
 
+        {!recording && !working && draft && !transcript && (
+          <div className="mt-3 flex items-center justify-between gap-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            <span>You have an unsaved transcript from earlier.</span>
+            <span className="flex shrink-0 gap-3">
+              <button onClick={() => { setTranscript(draft); setDraft(""); }} className="font-semibold underline">Restore</button>
+              <button aria-label="Dismiss" onClick={() => { setDraft(""); try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ } }}>✕</button>
+            </span>
+          </div>
+        )}
         {working && <p className="mt-3 text-sm text-stone-600">Transcribing on your device…</p>}
         {error && <p className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>}
         <p className="mt-4 text-xs text-stone-500">

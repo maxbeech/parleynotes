@@ -5,6 +5,7 @@ import { listMeetings, deleteMeeting, type Meeting } from "@/lib/db";
 
 export default function SavedMeetings({ reloadFlag }: { reloadFlag: number }) {
   const [items, setItems] = useState<Meeting[]>([]);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     let live = true;
@@ -28,11 +29,21 @@ export default function SavedMeetings({ reloadFlag }: { reloadFlag: number }) {
 
   if (items.length === 0) return null;
 
+  const q = query.trim().toLowerCase();
+  const shown = q
+    ? items.filter((m) => m.title.toLowerCase().includes(q) || m.transcript.toLowerCase().includes(q))
+    : items;
+
   return (
     <div className="mt-5 border-t border-stone-200 pt-4">
       <h3 className="text-sm font-semibold text-stone-700">Saved on this device ({items.length})</h3>
+      {items.length > 3 && (
+        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or transcript…"
+          className="mt-2 w-full rounded-lg border border-stone-200 px-3 py-1.5 text-xs outline-none focus:border-emerald-400" />
+      )}
+      {shown.length === 0 && <p className="mt-2 text-xs text-stone-500">No meetings match “{query}”.</p>}
       <ul className="mt-2 space-y-1.5">
-        {items.map((m) => (
+        {shown.map((m) => (
           <li key={m.id} className="flex items-center justify-between gap-2 rounded-lg bg-stone-50 px-3 py-2 text-sm">
             <span className="truncate">
               <span className="font-medium">{m.title}</span>
