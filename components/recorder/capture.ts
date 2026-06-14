@@ -20,7 +20,8 @@ export class AudioCapture {
 
   /** Request mic and/or tab audio and begin accumulating PCM. */
   async start(opts: { mic: boolean; tab: boolean }): Promise<void> {
-    const ctx = new AudioContext();
+    const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctx();
     this.ctx = ctx;
     this.sampleRate = ctx.sampleRate;
     const sources: MediaStreamAudioSourceNode[] = [];
@@ -93,8 +94,14 @@ export class AudioCapture {
 
   /** Decode an uploaded audio file to mono Float32 + its sample rate. */
   static async decodeFile(file: File): Promise<{ audio: Float32Array; sampleRate: number }> {
-    const ctx = new AudioContext();
-    const buf = await ctx.decodeAudioData(await file.arrayBuffer());
+    return AudioCapture.decodeArrayBuffer(await file.arrayBuffer());
+  }
+
+  /** Decode raw audio bytes (file or fetched sample) to mono Float32 + rate. */
+  static async decodeArrayBuffer(bytes: ArrayBuffer): Promise<{ audio: Float32Array; sampleRate: number }> {
+    const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctx();
+    const buf = await ctx.decodeAudioData(bytes.slice(0));
     const channels: Float32Array[] = [];
     for (let c = 0; c < buf.numberOfChannels; c++) channels.push(buf.getChannelData(c));
     const len = buf.length;

@@ -5,7 +5,8 @@
 // OpenAI Whisper entirely on the user's device. Whisper model weights stream
 // from the Hugging Face CDN on first use and are then cached by the browser.
 //
-// Messages in:  { type: "load" } | { type: "transcribe", id, audio: Float32Array }
+// Messages in:  { type: "load", lang } | { type: "transcribe", id, audio, lang }
+//   lang: "en" (English-only, faster) | "multi" (multilingual)
 // Messages out: { status: "device", device } | { status: "progress", file, progress }
 //               | { status: "ready" } | { status: "result", id, text }
 //               | { status: "error", id?, message }
@@ -27,22 +28,29 @@ async function pickDevice() {
   return "wasm";
 }
 
+// Model matrix: WebGPU runs the larger, more accurate base model; WASM uses the
+// fast tiny model. English-only variants are faster/smaller for English audio.
+function modelFor(device, lang) {
+  if (lang === "multi") {
+    return device === "webgpu" ? "onnx-community/whisper-base" : "Xenova/whisper-tiny";
+  }
+  return device === "webgpu" ? "onnx-community/whisper-base.en" : "Xenova/whisper-tiny.en";
+}
+
 class Transcriber {
   static instance = null;
   static device = null;
+  static modelId = null;
 
-  static async get(progress) {
-    if (this.instance) return this.instance;
-    this.device = await pickDevice();
-    self.postMessage({ status: "device", device: this.device });
-    // English-first models (our audience records English meetings). WebGPU can
-    // run the larger, more accurate base model; WASM uses the fast tiny model.
-    const model =
-      this.device === "webgpu"
-        ? "onnx-community/whisper-base.en"
-        : "Xenova/whisper-tiny.en";
-    this.instance = await pipeline("automatic-speech-recognition", model, {
-      device: this.device,
+  static async get(lang, progress) {
+    const device = this.device || (this.device = await pickDevice());
+    const wanted = modelFor(device, lang || "en");
+    if (this.instance && this.modelId === wanted) return this.instance;
+    // Language/model changed (or first load) — (re)build the pipeline.
+    this.modelId = wanted;
+    self.postMessage({ status: "device", device });
+    this.instance = await pipeline("automatic-speech-recognition", wanted, {
+      device,
       progress_callback: progress,
     });
     return this.instance;
@@ -51,24 +59,20 @@ class Transcriber {
 
 const onProgress = (x) => {
   if (x.status === "progress") {
-    self.postMessage({
-      status: "progress",
-      file: x.file,
-      progress: Math.round(x.progress || 0),
-    });
+    self.postMessage({ status: "progress", file: x.file, progress: Math.round(x.progress || 0) });
   }
 };
 
 self.addEventListener("message", async (event) => {
-  const { type, id, audio } = event.data || {};
+  const { type, id, audio, lang } = event.data || {};
   try {
     if (type === "load") {
-      await Transcriber.get(onProgress);
+      await Transcriber.get(lang, onProgress);
       self.postMessage({ status: "ready" });
       return;
     }
     if (type === "transcribe") {
-      const transcriber = await Transcriber.get(onProgress);
+      const transcriber = await Transcriber.get(lang, onProgress);
       const output = await transcriber(audio, {
         chunk_length_s: 30,
         stride_length_s: 5,

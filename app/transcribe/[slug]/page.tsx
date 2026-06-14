@@ -32,7 +32,7 @@ export default async function PlatformPage({ params }: { params: Promise<{ slug:
   return (
     <main className="mx-auto max-w-3xl px-5 py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <nav className="mb-4 text-sm text-stone-400"><Link href="/transcribe" className="hover:text-stone-700">Transcribe</Link> › {p.name}</nav>
+      <nav className="mb-4 text-sm text-stone-500"><Link href="/transcribe" className="hover:text-stone-700">Transcribe</Link> › {p.name}</nav>
       <h1 className="text-3xl font-extrabold tracking-tight capitalize">{p.name} transcription, free & private</h1>
       <p className="mt-4 text-stone-600">{p.how}</p>
 
@@ -52,7 +52,7 @@ export default async function PlatformPage({ params }: { params: Promise<{ slug:
         <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500">Open ParleyNotes →</Link>
       </div>
 
-      <p className="mt-6 text-xs text-stone-400">Search demand (live Google Ads, US): {p.demand}.</p>
+      <p className="mt-6 text-xs text-stone-500">Search demand (live Google Ads, US): {p.demand}.</p>
     </main>
   );
 }

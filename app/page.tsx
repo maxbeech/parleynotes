@@ -29,7 +29,7 @@ export default function Home() {
               Star on GitHub
             </a>
           </div>
-          <p className="mt-4 text-xs text-stone-400">No sign-up. Works in Chrome, Edge and Brave.</p>
+          <p className="mt-4 text-xs text-stone-500">No sign-up. Works in Chrome, Edge and Brave.</p>
         </div>
       </section>
 

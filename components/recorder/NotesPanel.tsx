@@ -14,6 +14,7 @@ export default function NotesPanel({ transcript, durationSec }: { transcript: st
   const [err, setErr] = useState<string | null>(null);
   const [title, setTitle] = useState("Untitled meeting");
   const [saved, setSaved] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
   const [showKey, setShowKey] = useState(false);
   const [providerId, setProviderId] = useState("openai");
   const [apiKey, setApiKey] = useState("");
@@ -65,6 +66,11 @@ export default function NotesPanel({ transcript, durationSec }: { transcript: st
     await saveMeeting(m);
     setSaved(true); setReloadFlag((n) => n + 1);
     setTimeout(() => setSaved(false), 2000);
+  };
+
+  const copyNotes = () => {
+    const md = notes || notesToMarkdown(title, new Date().toISOString().slice(0, 10), summarizeTranscript(transcript), transcript);
+    navigator.clipboard?.writeText(md).then(() => { setCopied("notes"); setTimeout(() => setCopied(null), 1500); });
   };
 
   const download = () => {
@@ -119,6 +125,9 @@ export default function NotesPanel({ transcript, durationSec }: { transcript: st
       <div className="mt-3 flex gap-2">
         <button disabled={!has} onClick={save} className="rounded-lg bg-stone-900 px-3 py-2 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-40">
           {saved ? "Saved ✓" : "Save to this browser"}
+        </button>
+        <button disabled={!notes && !has} onClick={copyNotes} className="rounded-lg border border-stone-300 px-3 py-2 text-sm font-medium hover:bg-stone-50 disabled:opacity-40">
+          {copied === "notes" ? "Copied ✓" : "Copy"}
         </button>
         <button disabled={!notes && !has} onClick={download} className="rounded-lg border border-stone-300 px-3 py-2 text-sm font-medium hover:bg-stone-50 disabled:opacity-40">
           Export .md

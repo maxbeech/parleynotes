@@ -2,6 +2,7 @@
 import { splitSentences, extractiveSummary, summarizeTranscript, notesToMarkdown } from "../lib/summarize.ts";
 import { resample, mergeToMono, rms, concatFloat32, WHISPER_SAMPLE_RATE } from "../lib/audio.ts";
 import { buildNotesRequest, providerById, AI_PROVIDERS } from "../lib/ai-notes.ts";
+import { evaluateSupport } from "../lib/support.ts";
 import { COMPETITORS } from "../lib/competitors.ts";
 import { PLATFORMS } from "../lib/platforms.ts";
 import { USE_CASES } from "../lib/usecases.ts";
@@ -33,6 +34,7 @@ const notes = summarizeTranscript(transcript);
 ok("finds action items", notes.actionItems.some((a) => a.includes("Friday")), JSON.stringify(notes.actionItems));
 ok("finds decisions", notes.decisions.some((d) => d.toLowerCase().includes("decided")), JSON.stringify(notes.decisions));
 ok("finds questions", notes.questions.length >= 2, JSON.stringify(notes.questions));
+ok("a question is NOT also listed as an action item", !notes.actionItems.some((a) => a.endsWith("?")), JSON.stringify(notes.actionItems));
 ok("wordCount > 0", notes.wordCount > 30);
 ok("empty transcript is safe", (() => { const n = summarizeTranscript(""); return n.summary.length === 0 && n.wordCount === 0; })());
 
@@ -67,6 +69,14 @@ ok("request truncates long transcript", (() => {
 })());
 ok("providerById falls back", providerById("nope").id === AI_PROVIDERS[0].id);
 ok("every provider has baseUrl + model", AI_PROVIDERS.every((p) => p.baseUrl.startsWith("https://") && !!p.defaultModel));
+
+// --- browser support detection ---
+const full = evaluateSupport({ getDisplayMedia: true, getUserMedia: true, audioContext: true, worker: true });
+ok("full support → all modes, no warning", full.canRecordMeeting && full.canRecordMic && full.canTranscribeFile && full.warning === "");
+const noTab = evaluateSupport({ getDisplayMedia: false, getUserMedia: true, audioContext: true, worker: true });
+ok("no getDisplayMedia → meeting off, mic+file on, warning shown", !noTab.canRecordMeeting && noTab.canRecordMic && noTab.canTranscribeFile && noTab.warning.length > 0);
+const noEngine = evaluateSupport({ getDisplayMedia: true, getUserMedia: true, audioContext: false, worker: true });
+ok("no AudioContext → nothing works, clear warning", !noEngine.canTranscribeFile && !noEngine.canRecordMic && !noEngine.canRecordMeeting && noEngine.warning.length > 0);
 
 // --- data integrity ---
 const uniq = (arr: string[]) => new Set(arr).size === arr.length;

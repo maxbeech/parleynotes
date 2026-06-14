@@ -25,6 +25,13 @@ const jsonLd = {
   url: SITE.url,
 };
 
+const NAV: [string, string][] = [
+  ["Transcribe", "/transcribe"],
+  ["Alternatives", "/alternatives"],
+  ["Use cases", "/use-cases"],
+  ["Pricing", "/pricing"],
+];
+
 function Header() {
   return (
     <header className="sticky top-0 z-20 border-b border-stone-200 bg-[var(--paper)]/85 backdrop-blur">
@@ -33,14 +40,21 @@ function Header() {
           <span className="grid h-7 w-7 place-items-center rounded-lg bg-emerald-600 text-sm text-white">P</span>
           Parley<span className="text-emerald-600">Notes</span>
         </Link>
-        <nav className="flex items-center gap-4 text-sm text-stone-600">
-          <Link href="/transcribe" className="hidden hover:text-stone-900 sm:inline">Transcribe</Link>
-          <Link href="/alternatives" className="hidden hover:text-stone-900 sm:inline">Alternatives</Link>
-          <Link href="/use-cases" className="hidden hover:text-stone-900 md:inline">Use cases</Link>
-          <Link href="/pricing" className="hover:text-stone-900">Pricing</Link>
-          <a href={SITE.repo} className="hidden hover:text-stone-900 sm:inline" target="_blank" rel="noreferrer">GitHub</a>
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-4 text-sm text-stone-600 sm:flex">
+          {NAV.map(([label, href]) => <Link key={href} href={href} className="hover:text-stone-900">{label}</Link>)}
+          <a href={SITE.repo} className="hover:text-stone-900" target="_blank" rel="noreferrer">GitHub</a>
           <Link href="/app" className="rounded-lg bg-stone-900 px-3 py-1.5 font-medium text-white hover:bg-stone-700">Open app</Link>
         </nav>
+        {/* Mobile nav — CSS-only disclosure, no client JS */}
+        <details className="relative sm:hidden">
+          <summary aria-label="Open menu" className="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-stone-300 text-stone-700 [&::-webkit-details-marker]:hidden">☰</summary>
+          <nav className="absolute right-0 mt-2 w-44 rounded-xl border border-stone-200 bg-white p-2 text-sm shadow-lg">
+            {NAV.map(([label, href]) => <Link key={href} href={href} className="block rounded-lg px-3 py-2 text-stone-700 hover:bg-stone-50">{label}</Link>)}
+            <a href={SITE.repo} className="block rounded-lg px-3 py-2 text-stone-700 hover:bg-stone-50" target="_blank" rel="noreferrer">GitHub</a>
+            <Link href="/app" className="mt-1 block rounded-lg bg-stone-900 px-3 py-2 text-center font-medium text-white">Open app</Link>
+          </nav>
+        </details>
       </div>
     </header>
   );
@@ -53,13 +67,13 @@ function Footer() {
         <div className="grid gap-6 sm:grid-cols-4">
           <div>
             <div className="font-bold text-stone-800">{SITE.name}</div>
-            <p className="mt-2 max-w-xs text-xs text-stone-400">{SITE.tagline}. Audio is transcribed on your device and never uploaded.</p>
+            <p className="mt-2 max-w-xs text-xs text-stone-500">{SITE.tagline}. Audio is transcribed on your device and never uploaded.</p>
           </div>
           <FooterCol title="Product" links={[["Open app", "/app"], ["Pricing", "/pricing"], ["Open source", "/open-source"]]} />
           <FooterCol title="Transcribe" links={[["Zoom", "/transcribe/zoom"], ["Google Meet", "/transcribe/google-meet"], ["Microsoft Teams", "/transcribe/microsoft-teams"]]} />
           <FooterCol title="Alternatives" links={[["Granola", "/alternatives/granola"], ["Otter.ai", "/alternatives/otter-ai"], ["Fireflies", "/alternatives/fireflies-ai"]]} />
         </div>
-        <p className="mt-8 text-xs text-stone-400">© {new Date().getFullYear()} {SITE.name}. Open source under the MIT licence. Free forever for individuals.</p>
+        <p className="mt-8 text-xs text-stone-500">© {new Date().getFullYear()} {SITE.name}. Open source under the MIT licence. Free forever for individuals.</p>
       </div>
     </footer>
   );
@@ -68,7 +82,7 @@ function Footer() {
 function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
   return (
     <div>
-      <div className="text-xs font-semibold uppercase tracking-wide text-stone-400">{title}</div>
+      <div className="text-xs font-semibold uppercase tracking-wide text-stone-500">{title}</div>
       <ul className="mt-2 space-y-1.5">
         {links.map(([label, href]) => (
           <li key={href}><Link href={href} className="hover:text-stone-900">{label}</Link></li>

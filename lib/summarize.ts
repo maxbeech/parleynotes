@@ -97,10 +97,12 @@ export function summarizeTranscript(transcript: string): MeetingNotes {
   const sentences = splitSentences(transcript);
   const wordCount = (transcript.match(/[a-z0-9']+/gi) ?? []).length;
   const summaryCount = Math.max(3, Math.min(7, Math.round(sentences.length / 8)));
+  // A question ("Should we…?") is an open question, not an action item, even
+  // though it may contain an action cue word — classify it as a question only.
   return {
     summary: extractiveSummary(sentences, summaryCount),
-    actionItems: dedupe(sentences.filter((s) => matchesAny(s, ACTION_CUES)), 12),
-    decisions: dedupe(sentences.filter((s) => matchesAny(s, DECISION_CUES)), 8),
+    actionItems: dedupe(sentences.filter((s) => !s.endsWith("?") && matchesAny(s, ACTION_CUES)), 12),
+    decisions: dedupe(sentences.filter((s) => !s.endsWith("?") && matchesAny(s, DECISION_CUES)), 8),
     questions: dedupe(sentences.filter((s) => s.endsWith("?")), 10),
     wordCount,
   };

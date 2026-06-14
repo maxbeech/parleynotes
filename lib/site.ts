@@ -11,8 +11,10 @@ export const SITE = {
   description:
     "ParleyNotes is the open-source AI meeting assistant that runs 100% in your browser. Record or upload a meeting, get an instant private transcript and structured notes — no account, no cloud upload, no per-seat fee. Free forever for individuals; company licenses for teams.",
   repo: "https://github.com/maxbeech/parleynotes",
-  // Whisper model served from the Hugging Face CDN to the in-browser worker.
   contactEmail: "hello@parleynotes.com",
+  // A real, CORS-enabled audio clip used by the "Try a sample" button so a
+  // first-time visitor can see on-device transcription work in seconds.
+  sampleAudioUrl: "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/jfk.wav",
 } as const;
 
 export const PRICING = {

@@ -51,20 +51,20 @@ export class TranscriberController {
     });
   }
 
-  /** Begin downloading + warming the model. */
-  preload() {
+  /** Begin downloading + warming the model. lang: "en" | "multi". */
+  preload(lang: string = "en") {
     this.init();
-    this.worker!.postMessage({ type: "load" });
+    this.worker!.postMessage({ type: "load", lang });
   }
 
   /** Transcribe a 16 kHz mono Float32 buffer; resolves with the text. */
-  transcribe(audio: Float32Array): Promise<string> {
+  transcribe(audio: Float32Array, lang: string = "en"): Promise<string> {
     this.init();
     const id = ++counter;
     return new Promise<string>((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
       // Transfer the buffer to avoid a copy.
-      this.worker!.postMessage({ type: "transcribe", id, audio }, [audio.buffer]);
+      this.worker!.postMessage({ type: "transcribe", id, audio, lang }, [audio.buffer]);
     });
   }
 

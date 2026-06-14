@@ -36,7 +36,7 @@ export default function SavedMeetings({ reloadFlag }: { reloadFlag: number }) {
           <li key={m.id} className="flex items-center justify-between gap-2 rounded-lg bg-stone-50 px-3 py-2 text-sm">
             <span className="truncate">
               <span className="font-medium">{m.title}</span>
-              <span className="ml-2 text-xs text-stone-400">{m.dateISO.slice(0, 10)}</span>
+              <span className="ml-2 text-xs text-stone-500">{m.dateISO.slice(0, 10)}</span>
             </span>
             <span className="flex shrink-0 gap-2 text-xs">
               <button onClick={() => exportOne(m)} className="text-stone-500 hover:text-stone-900">.md</button>

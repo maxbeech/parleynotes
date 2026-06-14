@@ -66,7 +66,7 @@ export default function Pricing() {
         ))}
       </div>
 
-      <p className="mt-8 text-center text-xs text-stone-400">
+      <p className="mt-8 text-center text-xs text-stone-500">
         Prices in USD. Self-hosting is always free under the MIT licence — a Company license adds SSO, admin tooling and support.
       </p>
     </main>

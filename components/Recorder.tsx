@@ -3,15 +3,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TranscriberController } from "./recorder/transcriber";
 import { AudioCapture } from "./recorder/capture";
-import { resample, rms, WHISPER_SAMPLE_RATE } from "@/lib/audio";
+import Controls from "./recorder/Controls";
 import NotesPanel from "./recorder/NotesPanel";
+import { resample, rms, WHISPER_SAMPLE_RATE } from "@/lib/audio";
+import { evaluateSupport, readCapabilities, type SupportResult } from "@/lib/support";
+import { SITE } from "@/lib/site";
 
 type ModelState = "idle" | "loading" | "ready";
 const CHUNK_MS = 20000; // transcribe every 20s of speech for a live feel
 
 export default function Recorder() {
   const [model, setModel] = useState<ModelState>("idle");
-  const [device, setDevice] = useState<string>("");
+  const [device, setDevice] = useState("");
   const [progress, setProgress] = useState(0);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -19,11 +22,23 @@ export default function Recorder() {
   const [level, setLevel] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [lang, setLang] = useState("en");
+  const [copied, setCopied] = useState(false);
+  const [support, setSupport] = useState<SupportResult>({
+    canRecordMeeting: true, canRecordMic: true, canTranscribeFile: true, warning: "",
+  });
 
   const trans = useRef<TranscriberController | null>(null);
   const cap = useRef<AudioCapture | null>(null);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
   const busy = useRef(false);
+  const langRef = useRef("en");
+
+  // Detect real browser capabilities on mount. navigator is unavailable during
+  // SSR, so we start optimistic and correct on the client (hydration-safe).
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setSupport(evaluateSupport(readCapabilities())); }, []);
+  useEffect(() => { langRef.current = lang; }, [lang]);
 
   const getTranscriber = useCallback(() => {
     if (!trans.current) {
@@ -40,21 +55,20 @@ export default function Recorder() {
 
   const loadModel = useCallback(() => {
     if (model !== "idle") return;
-    setModel("loading");
-    setError(null);
-    getTranscriber().preload();
+    setModel("loading"); setError(null);
+    getTranscriber().preload(langRef.current);
   }, [model, getTranscriber]);
 
   const transcribeBuffer = useCallback(async (audio: Float32Array, rate: number) => {
     const pcm = resample(audio, rate, WHISPER_SAMPLE_RATE);
-    return getTranscriber().transcribe(pcm);
+    return getTranscriber().transcribe(pcm, langRef.current);
   }, [getTranscriber]);
 
   const tick = useCallback(async () => {
     const c = cap.current;
     if (!c || busy.current) return;
     const fresh = c.drainNew();
-    if (fresh.length < c.sampleRate * 2 || rms(fresh) < 0.008) return; // skip <2s / silence
+    if (fresh.length < c.sampleRate * 2 || rms(fresh) < 0.004) return; // skip <2s / silence
     busy.current = true;
     try {
       const text = await transcribeBuffer(fresh, c.sampleRate);
@@ -68,12 +82,10 @@ export default function Recorder() {
     if (model === "idle") loadModel();
     const c = new AudioCapture();
     c.onLevel = (r) => setLevel(r);
-    try {
-      await c.start({ mic, tab });
-    } catch (e) { setError((e as Error).message); return; }
+    try { await c.start({ mic, tab }); }
+    catch (e) { setError((e as Error).message); return; }
     cap.current = c;
-    setRecording(true);
-    setElapsed(0);
+    setRecording(true); setElapsed(0);
     let last = 0;
     timer.current = setInterval(() => {
       setElapsed(Math.floor(c.totalSeconds()));
@@ -90,29 +102,34 @@ export default function Recorder() {
     setWorking(true);
     try {
       const fresh = c.drainNew();
-      if (fresh.length > c.sampleRate && rms(fresh) > 0.006) {
+      if (fresh.length > c.sampleRate && rms(fresh) > 0.003) {
         const text = await transcribeBuffer(fresh, c.sampleRate);
         if (text) setTranscript((t) => (t ? t + " " : "") + text);
       }
     } catch (e) { setError(String((e as Error).message)); }
-    await c.stop();
-    cap.current = null;
-    setLevel(0);
-    setWorking(false);
+    await c.stop(); cap.current = null; setLevel(0); setWorking(false);
   }, [transcribeBuffer]);
 
-  const onFile = useCallback(async (file: File) => {
-    setError(null);
+  const transcribeBytes = useCallback(async (bytes: ArrayBuffer) => {
     if (model === "idle") loadModel();
-    setWorking(true);
-    setTranscript("");
+    setWorking(true); setTranscript("");
     try {
-      const { audio, sampleRate } = await AudioCapture.decodeFile(file);
-      const text = await transcribeBuffer(audio, sampleRate);
-      setTranscript(text);
-    } catch (e) { setError((e as Error).message || "Could not read that audio file."); }
+      const { audio, sampleRate } = await AudioCapture.decodeArrayBuffer(bytes);
+      setTranscript(await transcribeBuffer(audio, sampleRate));
+    } catch (e) { setError((e as Error).message || "Could not read that audio."); }
     setWorking(false);
   }, [model, loadModel, transcribeBuffer]);
+
+  const onFile = useCallback(async (file: File) => { setError(null); await transcribeBytes(await file.arrayBuffer()); }, [transcribeBytes]);
+  const onSample = useCallback(async () => {
+    setError(null);
+    try { await transcribeBytes(await fetch(SITE.sampleAudioUrl).then((r) => r.arrayBuffer())); }
+    catch { setError("Could not fetch the sample clip — check your connection."); setWorking(false); }
+  }, [transcribeBytes]);
+
+  const copyTranscript = useCallback(() => {
+    navigator.clipboard?.writeText(transcript).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); });
+  }, [transcript]);
 
   const mins = `${String(Math.floor(elapsed / 60)).padStart(2, "0")}:${String(elapsed % 60).padStart(2, "0")}`;
 
@@ -122,22 +139,13 @@ export default function Recorder() {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">Record or upload</h2>
           {model === "ready" && <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">Model ready{device ? ` · ${device}` : ""}</span>}
-          {model === "loading" && <span className="text-xs text-stone-500">Loading model… {progress}%</span>}
+          {model === "loading" && <span className="text-xs text-stone-600">Loading model… {progress}%</span>}
         </div>
 
         {!recording ? (
-          <div className="mt-4 grid gap-2">
-            <button onClick={() => start(true, true)} className="rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-500">
-              ● Record meeting (mic + meeting tab audio)
-            </button>
-            <button onClick={() => start(true, false)} className="rounded-xl border border-stone-300 px-4 py-2.5 text-sm font-medium hover:bg-stone-50">
-              Record microphone only
-            </button>
-            <label className="mt-1 cursor-pointer rounded-xl border border-dashed border-stone-300 px-4 py-3 text-center text-sm text-stone-600 hover:bg-stone-50">
-              ⬆ Upload an audio file (MP3, WAV, M4A)
-              <input type="file" accept="audio/*" className="hidden" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
-            </label>
-          </div>
+          <Controls support={support} lang={lang} onLang={setLang} busy={working}
+            onRecordMeeting={() => start(true, true)} onRecordMic={() => start(true, false)}
+            onUpload={onFile} onSample={onSample} />
         ) : (
           <div className="mt-4">
             <div className="flex items-center gap-3">
@@ -147,27 +155,24 @@ export default function Recorder() {
                 <div className="h-full bg-emerald-500 transition-[width] duration-150" style={{ width: `${Math.min(100, Math.round(level * 400))}%` }} />
               </div>
             </div>
-            <button onClick={stop} className="mt-4 w-full rounded-xl bg-stone-900 px-4 py-3 text-sm font-semibold text-white hover:bg-stone-700">
-              ■ Stop & finish
-            </button>
+            <button onClick={stop} className="mt-4 w-full rounded-xl bg-stone-900 px-4 py-3 text-sm font-semibold text-white hover:bg-stone-700">■ Stop & finish</button>
           </div>
         )}
 
-        {working && <p className="mt-3 text-sm text-stone-500">Transcribing on your device…</p>}
+        {working && <p className="mt-3 text-sm text-stone-600">Transcribing on your device…</p>}
         {error && <p className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>}
-        <p className="mt-4 text-xs text-stone-400">
-          Tip: when sharing your meeting tab, tick <b>“Share tab audio”</b> so the other participants are captured.
-          Audio never leaves your browser.
+        <p className="mt-4 text-xs text-stone-500">
+          Tip: when sharing your meeting tab, tick <b>“Share tab audio”</b> so the other participants are captured. Audio never leaves your browser.
         </p>
 
         <div className="mt-5">
-          <h3 className="text-sm font-semibold text-stone-700">Transcript</h3>
-          <textarea
-            value={transcript}
-            onChange={(e) => setTranscript(e.target.value)}
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-stone-700">Transcript</h3>
+            {transcript && <button onClick={copyTranscript} className="text-xs text-stone-500 hover:text-stone-900">{copied ? "Copied ✓" : "Copy"}</button>}
+          </div>
+          <textarea value={transcript} onChange={(e) => setTranscript(e.target.value)}
             placeholder="Your transcript will appear here as you record…"
-            className="mt-2 h-56 w-full resize-y rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm leading-relaxed outline-none focus:border-emerald-400"
-          />
+            className="mt-2 h-56 w-full resize-y rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm leading-relaxed outline-none focus:border-emerald-400" />
         </div>
       </div>
 

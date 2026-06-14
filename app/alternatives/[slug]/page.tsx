@@ -24,7 +24,7 @@ export default async function AlternativePage({ params }: { params: Promise<{ sl
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-12">
-      <nav className="mb-4 text-sm text-stone-400"><Link href="/alternatives" className="hover:text-stone-700">Alternatives</Link> › {c.name}</nav>
+      <nav className="mb-4 text-sm text-stone-500"><Link href="/alternatives" className="hover:text-stone-700">Alternatives</Link> › {c.name}</nav>
       <h1 className="text-3xl font-extrabold tracking-tight">The open-source {c.name} alternative</h1>
       <p className="mt-4 text-stone-600">
         <strong>{c.name}</strong> {c.what} ParleyNotes does the same core job — accurate transcripts and AI
@@ -33,7 +33,7 @@ export default async function AlternativePage({ params }: { params: Promise<{ sl
       </p>
 
       <div className="mt-6 rounded-xl border border-stone-200 bg-white p-5">
-        <div className="text-xs font-semibold uppercase tracking-wide text-stone-400">How {c.name} works today</div>
+        <div className="text-xs font-semibold uppercase tracking-wide text-stone-500">How {c.name} works today</div>
         <p className="mt-1 text-sm text-stone-600">{c.model}</p>
       </div>
 
@@ -59,7 +59,7 @@ export default async function AlternativePage({ params }: { params: Promise<{ sl
         <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500">Open ParleyNotes →</Link>
       </div>
 
-      <p className="mt-6 text-xs text-stone-400">Search demand (live Google Ads, US): {c.demand}. Comparison reflects each tool’s publicly described model.</p>
+      <p className="mt-6 text-xs text-stone-500">Search demand (live Google Ads, US): {c.demand}. Comparison reflects each tool’s publicly described model.</p>
     </main>
   );
 }
