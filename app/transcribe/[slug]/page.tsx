@@ -49,7 +49,7 @@ export default async function PlatformPage({ params }: { params: Promise<{ slug:
       <div className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
         <h2 className="text-lg font-bold capitalize">Transcribe your next {p.name} call</h2>
         <p className="mt-1 text-sm text-stone-600">Free, private, and no bot in the participant list.</p>
-        <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500">Open ParleyNotes →</Link>
+        <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600">Open ParleyNotes →</Link>
       </div>
 
       <p className="mt-6 text-xs text-stone-500">Search demand (live Google Ads, US): {p.demand}.</p>

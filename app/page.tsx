@@ -14,7 +14,7 @@ export default function Home() {
             Open source · MIT · runs in your browser
           </span>
           <h1 className="mx-auto mt-5 max-w-3xl text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">
-            The open-source AI meeting assistant that keeps your meetings <span className="text-emerald-600">private</span>.
+            The open-source AI meeting assistant that keeps your meetings <span className="text-emerald-700">private</span>.
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-stone-600">
             Record or upload a meeting and get an instant transcript and structured notes — transcribed
@@ -22,7 +22,7 @@ export default function Home() {
             no per-seat fee. The open alternative to Granola and Otter.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link href="/app" className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-500">
+            <Link href="/app" className="rounded-xl bg-emerald-700 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-600">
               Open the app — free
             </Link>
             <a href={SITE.repo} target="_blank" rel="noreferrer" className="rounded-xl border border-stone-300 px-6 py-3 text-sm font-medium hover:bg-white">
@@ -35,6 +35,7 @@ export default function Home() {
 
       {/* Value props */}
       <section className="mx-auto max-w-6xl px-5 py-12">
+        <h2 className="sr-only">Why ParleyNotes</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {VALUE_PROPS.map((v) => (
             <div key={v.title} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
@@ -55,7 +56,7 @@ export default function Home() {
             ["3. Get notes", "One click turns the transcript into a summary, decisions and action items. Edit, save locally, or export Markdown."],
           ].map(([t, b]) => (
             <div key={t}>
-              <div className="text-sm font-bold text-emerald-600">{t}</div>
+              <div className="text-sm font-bold text-emerald-700">{t}</div>
               <p className="mt-1 text-sm text-stone-600">{b}</p>
             </div>
           ))}
@@ -109,7 +110,7 @@ export default function Home() {
         <h2 className="text-3xl font-bold">Your meetings, your data.</h2>
         <p className="mx-auto mt-3 max-w-xl text-stone-600">Free forever for individuals. Company licenses add a shared team workspace, SSO and a supported self-host bundle.</p>
         <div className="mt-6 flex justify-center gap-3">
-          <Link href="/app" className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-500">Open the app</Link>
+          <Link href="/app" className="rounded-xl bg-emerald-700 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-600">Open the app</Link>
           <Link href="/pricing" className="rounded-xl border border-stone-300 px-6 py-3 text-sm font-medium hover:bg-white">See pricing</Link>
         </div>
       </section>

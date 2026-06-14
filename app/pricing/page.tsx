@@ -54,7 +54,7 @@ export default function Pricing() {
             <div className="mt-2"><span className="text-3xl font-extrabold">{t.price}</span> <span className="text-sm text-stone-500">{t.cadence}</span></div>
             <ul className="mt-5 space-y-2 text-sm text-stone-600">
               {t.features.map((f) => (
-                <li key={f} className="flex gap-2"><span className="text-emerald-500">✓</span><span>{f}</span></li>
+                <li key={f} className="flex gap-2"><span className="text-emerald-700">✓</span><span>{f}</span></li>
               ))}
             </ul>
             <div className="mt-6">

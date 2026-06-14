@@ -40,7 +40,7 @@ export default async function AlternativePage({ params }: { params: Promise<{ sl
       <h2 className="mt-10 text-2xl font-bold">Why teams switch to ParleyNotes</h2>
       <ul className="mt-4 space-y-2 text-stone-600">
         {c.diff.map((d) => (
-          <li key={d} className="flex gap-2"><span className="text-emerald-500">✓</span><span>{d}</span></li>
+          <li key={d} className="flex gap-2"><span className="text-emerald-700">✓</span><span>{d}</span></li>
         ))}
       </ul>
 
@@ -56,7 +56,7 @@ export default async function AlternativePage({ params }: { params: Promise<{ sl
       <div className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
         <h2 className="text-lg font-bold">Try the {c.name} alternative free</h2>
         <p className="mt-1 text-sm text-stone-600">No account, no card, no bot in your meeting. Open the app and record your next call.</p>
-        <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500">Open ParleyNotes →</Link>
+        <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600">Open ParleyNotes →</Link>
       </div>
 
       <p className="mt-6 text-xs text-stone-500">Search demand (live Google Ads, US): {c.demand}. Comparison reflects each tool’s publicly described model.</p>

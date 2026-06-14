@@ -98,19 +98,19 @@ export default function NotesPanel({ transcript, durationSec }: { transcript: st
         <div className="mt-3 rounded-xl bg-stone-50 p-3 text-sm">
           <p className="text-xs text-stone-500">Optional — for AI-written notes. Your key stays in this browser and the transcript goes straight to your provider, never to us.</p>
           <div className="mt-2 flex gap-2">
-            <select value={providerId} onChange={(e) => persistKey(e.target.value, apiKey)} className="rounded-lg border border-stone-300 px-2 py-1.5 text-sm">
+            <select aria-label="AI provider" value={providerId} onChange={(e) => persistKey(e.target.value, apiKey)} className="rounded-lg border border-stone-300 px-2 py-1.5 text-sm">
               {AI_PROVIDERS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
             </select>
-            <input type="password" value={apiKey} onChange={(e) => persistKey(providerId, e.target.value)} placeholder={providerById(providerId).keyHint}
+            <input aria-label="API key" type="password" value={apiKey} onChange={(e) => persistKey(providerId, e.target.value)} placeholder={providerById(providerId).keyHint}
               className="flex-1 rounded-lg border border-stone-300 px-2 py-1.5 text-sm" />
           </div>
         </div>
       )}
 
-      <input value={title} onChange={(e) => setTitle(e.target.value)} className="mt-3 w-full rounded-lg border border-stone-200 px-3 py-2 text-sm font-medium" />
+      <input aria-label="Meeting title" value={title} onChange={(e) => setTitle(e.target.value)} className="mt-3 w-full rounded-lg border border-stone-200 px-3 py-2 text-sm font-medium" />
 
       <div className="mt-3 flex flex-wrap gap-2">
-        <button disabled={!has} onClick={localNotes} className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-40">
+        <button disabled={!has} onClick={localNotes} className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-600 disabled:opacity-40">
           Generate notes (free, on-device)
         </button>
         <button disabled={!has || busy} onClick={aiNotes} className="rounded-lg border border-stone-300 px-3 py-2 text-sm font-medium hover:bg-stone-50 disabled:opacity-40">
@@ -119,7 +119,7 @@ export default function NotesPanel({ transcript, durationSec }: { transcript: st
       </div>
       {err && <p className="mt-2 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{err}</p>}
 
-      <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Generated notes appear here (editable Markdown)…"
+      <textarea aria-label="Generated notes (Markdown)" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Generated notes appear here (editable Markdown)…"
         className="mt-3 h-60 w-full resize-y rounded-xl border border-stone-200 bg-stone-50 p-3 font-mono text-xs leading-relaxed outline-none focus:border-emerald-400" />
 
       <div className="mt-3 flex gap-2">

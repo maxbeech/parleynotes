@@ -27,7 +27,7 @@ export default function CheckoutButton({ label = "Start Team plan" }: { label?: 
   return (
     <div>
       <button onClick={start} disabled={loading}
-        className="w-full rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-60">
+        className="w-full rounded-xl bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600 disabled:opacity-60">
         {loading ? "Starting…" : label}
       </button>
       {msg && <p className="mt-2 text-center text-xs text-stone-500">{msg}</p>}

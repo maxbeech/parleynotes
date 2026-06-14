@@ -32,7 +32,7 @@ export default function Controls({
       </label>
 
       <button onClick={onRecordMeeting} disabled={!support.canRecordMeeting || busy}
-        className="rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-40">
+        className="rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40">
         ● Record meeting (mic + meeting tab audio)
       </button>
       <button onClick={onRecordMic} disabled={!support.canRecordMic || busy}

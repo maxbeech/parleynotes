@@ -186,7 +186,7 @@ export default function Recorder() {
             <h3 className="text-sm font-semibold text-stone-700">Transcript</h3>
             {transcript && <button onClick={copyTranscript} className="text-xs text-stone-500 hover:text-stone-900">{copied ? "Copied ✓" : "Copy"}</button>}
           </div>
-          <textarea value={transcript} onChange={(e) => setTranscript(e.target.value)}
+          <textarea aria-label="Transcript" value={transcript} onChange={(e) => setTranscript(e.target.value)}
             placeholder="Your transcript will appear here as you record…"
             className="mt-2 h-56 w-full resize-y rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm leading-relaxed outline-none focus:border-emerald-400" />
         </div>

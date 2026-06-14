@@ -49,7 +49,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             return (
               <ul key={i} className="space-y-1.5 text-stone-600">
                 {b.items.map((it, j) => (
-                  <li key={j} className="flex gap-2"><span className="text-emerald-500">•</span><span>{it}</span></li>
+                  <li key={j} className="flex gap-2"><span className="text-emerald-700">•</span><span>{it}</span></li>
                 ))}
               </ul>
             );
@@ -60,7 +60,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <div className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
         <h2 className="text-lg font-bold text-stone-900">Try private AI meeting notes free</h2>
         <p className="mt-1 text-sm text-stone-600">Record or upload a meeting and get an on-device transcript and notes. No account, no bot, no cloud.</p>
-        <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500">Open ParleyNotes →</Link>
+        <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600">Open ParleyNotes →</Link>
       </div>
     </article>
   );

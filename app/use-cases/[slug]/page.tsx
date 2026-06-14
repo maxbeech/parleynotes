@@ -30,14 +30,14 @@ export default async function UseCasePage({ params }: { params: Promise<{ slug: 
       <h2 className="mt-10 text-2xl font-bold">What your notes capture</h2>
       <ul className="mt-4 grid gap-2 sm:grid-cols-2">
         {u.captures.map((c) => (
-          <li key={c} className="flex gap-2 rounded-lg border border-stone-200 bg-white p-3 text-sm text-stone-600"><span className="text-emerald-500">✓</span>{c}</li>
+          <li key={c} className="flex gap-2 rounded-lg border border-stone-200 bg-white p-3 text-sm text-stone-600"><span className="text-emerald-700">✓</span>{c}</li>
         ))}
       </ul>
 
       <div className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
         <h2 className="text-lg font-bold">Use ParleyNotes for {u.name.toLowerCase()}</h2>
         <p className="mt-1 text-sm text-stone-600">Free, private, on-device. Record or upload — your notes are ready in seconds.</p>
-        <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500">Open the app →</Link>
+        <Link href="/app" className="mt-3 inline-block rounded-lg bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600">Open the app →</Link>
       </div>
     </main>
   );

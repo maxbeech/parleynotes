@@ -38,7 +38,7 @@ export default function SavedMeetings({ reloadFlag }: { reloadFlag: number }) {
     <div className="mt-5 border-t border-stone-200 pt-4">
       <h3 className="text-sm font-semibold text-stone-700">Saved on this device ({items.length})</h3>
       {items.length > 3 && (
-        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or transcript…"
+        <input aria-label="Search saved meetings" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search title or transcript…"
           className="mt-2 w-full rounded-lg border border-stone-200 px-3 py-1.5 text-xs outline-none focus:border-emerald-400" />
       )}
       {shown.length === 0 && <p className="mt-2 text-xs text-stone-500">No meetings match “{query}”.</p>}
